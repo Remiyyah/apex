@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.header {
+    
+    text-align: center;
+    padding: 50px 0;
+    color: #fff;
+    background-color: #54483A;
+  
+    background-image: linear-gradient(rgba(19, 43, 46, 0.93), rgba(16, 29, 44, 0.93)); 
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.search-box {
+    margin-top: 20px;
+}
+
+.search-box input {
+    padding: 10px;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.search-box button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #5c32aa;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+
+    .cards-section {
+    /* Add the background image */
+    background-image: url('mechanic.jpeg');
+    
+    /* Create a dark blue tint overlay */
+    background-color: rgba(0, 0, 139, 0.6); /* Dark blue with 60% opacity */
+    
+    /* Blend the overlay with the background image */
+    background-blend-mode: multiply;
+    
+    /* Ensure the background image covers the section properly */
+    background-size: cover;
+    background-position: center;
+    padding: 40px 0;
+    min-height: 400px;
+}
+
+ .knowledge-base, .popular-articles, .additional-info {
+    background: #f4f8fc;
+    padding: 40px 0;
+}
+
+.cards, .knowledge-cards, .article-cards, .info-card {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.card, .knowledge-card, .info-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.knowledge-base h2, .popular-articles h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.view-categories, .view-articles {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 30px;
+    background: #5c32aa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.footer {
+    background: #7b43a3;
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+}
+
+.footer button {
+    padding: 10px 30px;
+    background: #5c32aa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+</style>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>We are here to help!</h1>
+            <p>Have questions? Search through our Help Center.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Search for questions or topics...">
+                <button>Search</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="cards-section">
+        <div class="container">
+            <div class="cards">
+                <div class="card">
+                    <h3>Dolor sit amet</h3>
+                    <p>Helpful information on how to use dolorem.</p>
+                </div>
+                <div class="card">
+                    <h3>Lorem Ipsum</h3>
+                    <p>Ask questions and share your ideas!</p>
+                </div>
+                <div class="card">
+                    <h3>Ipsumina Lorema</h3>
+                    <p>Built to help you solve issues faster than ever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="knowledge-base">
+        <div class="container">
+            <h2>Knowledge Base</h2>
+            <p>Explore How-Tos and learn best practices from our knowledge base.</p>
+            <div class="knowledge-cards">
+                <div class="knowledge-card">
+                    <h3>Get started</h3>
+                    <p>Set up your account, configure support channels, customize your portal to reflect your brand, and more.</p>
+                </div>
+                <div class="knowledge-card">
+                    <h3>Configuring Automations</h3>
+                    <p>Save time and manual effort by automating mundane tasks in your deskoto.</p>
+                </div>
+                <div class="knowledge-card">
+                    <h3>Customer Portal Setup</h3>
+                    <p>Set up your support portal, populate it with useful solutions, and create a dedicated community for your customers.</p>
+                </div>
+                <div class="knowledge-card">
+                    <h3>Advanced Configurations</h3>
+                    <p>Configure surveys, ticket forms, multiple products, and other advanced features.</p>
+                </div>
+            </div>
+            <button class="view-categories">View All Categories</button>
+        </div>
+    </section>
+
+    <section class="popular-articles">
+        <div class="container">
+            <h2>Popular articles</h2>
+            <p>Discover the best of Deskoto with our Featured Articles category!</p>
+            <div class="article-cards">
+                <!-- Add article cards here as needed -->
+            </div>
+            <button class="view-articles">View All Articles</button>
+        </div>
+    </section>
+
+    <section class="additional-info">
+        <div class="container">
+            <div class="info-card">
+                <h3>Ask in the Forums</h3>
+                <p>Learn from your talented community. Search for a topic or start your own thread!</p>
+                <button>Join</button>
+            </div>
+            <div class="info-card">
+                <h3>Visit Our Blog</h3>
+                <p>We love to share ideas! If you're looking for great articles or inspiration to get you going.</p>
+                <button>Visit</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Still Have Questions? Our customer core team is here for you!</p>
+            <button>Contact Us</button>
+        </div>
+    </footer>
+
+</body>
+</html>

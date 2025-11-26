@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: url('login-bg.png') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .typing-text {
+      font-size: 2rem;
+      color: white;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .login-box {
+      display: none;
+      width: 400px;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      border-radius: 8px;
+      position: absolute;
+      z-index: 1;
+      cursor: move;
+    }
+
+    .login-box input {
+      background-color: transparent;
+      color: white;
+    }
+
+    .btn-custom {
+      background-color: #D3C1A5;
+      color: #000;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="typing-text"></div>
+
+  <div class="login-box">
+    <h2>Login</h2>
+    <p style="font-size: small;">View your reservations, update your account information, and save configurations in your account.</p>
+    <form>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="jsmith@example.com *">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password *">
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="stayLoggedIn">
+        <label class="form-check-label" for="stayLoggedIn">Keep me logged-in</label>
+      </div>
+      <button type="submit" class="btn btn-custom btn-block mt-3">Login</button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="#">Create Account</a> |   <a href="#">Forgot Your Password?</a>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      var text = "Welcome to Lorem Ipsum!";
+      var typingSpeed = 100;
+      var backspacingSpeed = 50;
+      var index = 0;
+      var isBackspacing = false;
+
+      function typeWriter() {
+        if (!isBackspacing) {
+          if (index < text.length) {
+            $('.typing-text').append(text.charAt(index));
+            index++;
+            setTimeout(typeWriter, typingSpeed);
+          } else {
+            setTimeout(function() {
+              isBackspacing = true;
+              typeWriter();
+            }, 1000);
+          }
+        } else {
+          if (index > 0) {
+            $('.typing-text').text(text.substring(0, index - 1));
+            index--;
+            setTimeout(typeWriter, backspacingSpeed);
+          } else {
+            $('.typing-text').remove();
+            $('.login-box').fadeIn();
+          }
+        }
+      }
+
+      typeWriter();
+
+      $('.login-box').draggable();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Section with Carousel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            padding: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: inline-block;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    position: relative; /* Necessary for positioning the pseudo-element */
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 100%; /* Underline width */
+    height: 2px; /* Underline height */
+    background-color: burlywood; /* Underline color */
+    left: 0;
+    bottom: -5px; /* Positioning the underline */
+    transform: scaleX(0); /* Start the underline hidden */
+    transform-origin: bottom right; /* Start the underline from the right */
+    transition: transform 0.3s ease; /* Smooth transition for the underline */
+}
+
+nav ul li a:hover::after,
+nav ul li a.active::after {
+    transform: scaleX(1); /* Full width on hover or when active */
+    transform-origin: bottom left; /* Animate from right to left */
+}
+       
+        #feature-content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: left;
+            position: relative; /* Positioning for absolute elements */
+            overflow: hidden; /* Hide overflow for sliding effect */
+            height: 300px; /* Adjust height as needed */
+        }
+
+        .feature {
+            position: absolute;
+            top: 0;
+            left: 100%; /* Start off-screen to the right */
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out; /* Fade in and out */
+            transform: translateX(100%);
+            transition: transform 1s ease-in-out, opacity 0.5s ease-in-out; /* Slide and fade */
+        }
+
+        .feature.active {
+            left: 0;
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .feature.hidden-left {
+            transform: translateX(-100%);
+        }
+
+        .feature.hidden-right {
+            transform: translateX(100%);
+        }
+
+        .feature img {
+            width: 40%; /* Adjust image size */
+            height: auto;
+            float: left; /* Float the image to the left */
+            margin-right: 7rem; /* Space between image and caption */
+        }
+
+        .caption {
+            overflow: hidden; /* Clear the float */
+        }
+
+        .caption h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .caption p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .caption a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Most Advanced <em>Electric Car.</em></h1>
+        <h4>Designed in Lorem; Assembled in Lipsum;<br> Engineered to Change the <span style="color:burlywood">World.</span></h4>
+        <nav>
+            <ul>
+                <li><a href="#" data-feature="about" class="feature-link active">About Us</a></li>
+                <li><a href="#" data-feature="sustainability" class="feature-link">Sustainability</a></li>
+                <li><a href="#" data-feature="charging" class="feature-link">Charging</a></li>
+                <li><a href="#" data-feature="service" class="feature-link">Service</a></li>
+                <li><a href="#" data-feature="safety" class="feature-link">Safety</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="feature-content">
+        <div class="feature about active">
+            <img src="about-us.webp" alt="About Us">
+            <div class="caption">
+                <h2>Technology that drives sustainability.</h2>
+                <p style="color:lightslategray">Our in-house developed technology, innovative design, and advanced EV motors allow customers to go farther with fewer batteries. Lighter, smaller battery packs mean vehicles use fewer precious metals and minerals.</p>
+                <a href="#">Learn More About Us</a>
+            </div>
+        </div>
+        <div class="feature sustainability">
+            <img src="eco-friendly.webp" alt="Sustainability">
+            <div class="caption">
+                <h2>Sustainable Practices</h2>
+                <p style="color:lightslategray">Our commitment to sustainability goes beyond just making electric vehicles. Learn about our eco-friendly practices and materials.</p>
+                <a href="#">Learn More About Sustainability</a>
+            </div>
+        </div>
+        <!-- Repeat for other features -->
+        <div class="feature charging">
+            <img src="charge.webp" alt="Charging">
+            <div class="caption">
+                <h2>Changing charging--<br>forever</h2>
+                <p style="color:lightslategray">Our commitment to sustainability goes beyond just making electric vehicles. Learn about our eco-friendly practices and materials.</p>
+                <a href="#">Explore Charging</a>
+            </div>
+        </div>
+
+        <div class="feature service">
+            <img src="service.webp" alt="Service">
+            <div class="caption">
+                <h2>Always at your service</h2>
+                <p style="color:lightslategray">Our commitment to sustainability goes beyond just making electric vehicles. Learn about our eco-friendly practices and materials.</p>
+                <a href="#">Visit our service centers</a>
+            </div>
+        </div>
+
+        <div class="feature safety">
+            <img src="safety.webp" alt="Safety">
+            <div class="caption">
+                <h2>Five-star safety</h2>
+                <p style="color:lightslategray">Our commitment to sustainability goes beyond just making electric vehicles. Learn about our eco-friendly practices and materials.</p>
+                
+            </div>
+        </div>
+    </section>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const featureLinks = document.querySelectorAll('.feature-link');
+    const features = document.querySelectorAll('.feature');
+    let activeFeatureIndex = 0; // Track the current active feature
+
+    featureLinks.forEach((link, index) => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const featureToShow = this.getAttribute('data-feature');
+            const newActiveFeature = document.querySelector(`.feature.${featureToShow}`);
+
+            // Check if the clicked feature is already active
+            if (newActiveFeature.classList.contains('active')) return;
+
+            // Determine the slide direction
+            const direction = index > activeFeatureIndex ? 'left' : 'right';
+
+            // Remove active and hidden classes from all features
+            features.forEach(feature => {
+                feature.classList.remove('active', 'hidden-left', 'hidden-right');
+            });
+
+            // Add transition classes for the outgoing feature
+            features[activeFeatureIndex].classList.add(`hidden-${direction}`);
+
+            // Delay adding the active class to the new feature for a smoother transition
+            setTimeout(() => {
+                newActiveFeature.classList.add('active');
+            }, 50); // Adjust the delay if needed to synchronize with CSS transitions
+
+            // Update the active index AFTER the transition starts
+            activeFeatureIndex = index;
+
+            // Update active class on links
+            featureLinks.forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Initially show the first feature
+    document.querySelector('.feature.about').classList.add('active');
+});
+    </script>
+</body>
+</html>

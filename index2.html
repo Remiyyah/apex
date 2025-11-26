@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex EV | Futuristic Electric Vehicles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #00ff9d;
+            --accent-color: #8a2be2;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.7);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 10, 15, 0.4), rgba(10, 10, 15, 0.7));
+            z-index: 0;
+        }
+
+        .promo-banner {
+            background: linear-gradient(90deg, #0a0a0f, #1a1a2e, #0a0a0f);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .promo-banner a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin-left: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .promo-banner a:hover {
+            color: white;
+            text-shadow: 0 0 8px var(--secondary-color);
+        }
+
+        .navbar-container {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            transition: all 0.4s ease-in-out;
+            width: 100%;
+            margin: 0 auto;
+            height: 90px;
+            position: absolute;
+            z-index: 1000;
+            top: 44px;
+            left: 0;
+            backdrop-filter: blur(5px);
+        }
+
+        .navbar-container.expanded {
+            height: 400px;
+            background-color: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            color: white;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .navbar-logo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        
+        .navbar-logo h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .navbar-logo img {
+            height: 40px;
+            margin-left: 10px;
+            filter: brightness(0) invert(1);
+        }
+
+        .navbar-nav {
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 0;
+            position: relative;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 10px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .navbar-icons i {
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-icons i:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .expanded-menu-content {
+            position: absolute;
+            top: 90px;
+            left: 0;
+            width: 100%;
+            height: calc(400px - 90px);
+            padding: 2rem 4rem;
+            box-sizing: border-box;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+        }
+        
+        .navbar-container.expanded .expanded-menu-content.active {
+             opacity: 1;
+             visibility: visible;
+             pointer-events: auto;
+             transition-delay: 0s;
+        }
+
+        .menu-left-column {
+            flex-basis: 30%;
+        }
+
+        .menu-right-column {
+            flex-basis: 70%;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li a {
+            color: #aaa;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-list li a:hover {
+            color: white;
+            padding-left: 10px;
+        }
+        
+        .image-box {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+        }
+        
+        .image-box:hover img {
+            transform: scale(1.05);
+        }
+        
+        .image-box h4 {
+            color: white;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .image-box:hover h4 {
+            color: var(--primary-color);
+        }
+
+        .image-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, rgba(10, 10, 15, 0.9), transparent);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .navbar-container.expanded .expanded-menu-content.active .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Animation delays */
+        #apex-air-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #apex-air-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #apex-air-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.4s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.5s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(3) .fade-in { transition-delay: 0.6s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(4) .fade-in { transition-delay: 0.7s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(5) .fade-in { transition-delay: 0.8s; }
+
+        #apex-gravity-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #apex-gravity-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #apex-gravity-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.3s; }
+        #apex-gravity-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.4s; }
+
+        #experience-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #experience-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #experience-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #experience-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.4s; }
+        #experience-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.5s; }
+
+        #shop-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #shop-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #shop-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #shop-menu .menu-list li:nth-child(4) .fade-in { transition-delay: 0.4s; }
+        #shop-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.5s; }
+        #shop-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.6s; }
+
+        /* Content section improvements */
+        .content { 
+            height: 100vh; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            color: white; 
+            padding: 4rem; 
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 1.5rem; 
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, white, var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        .content .info-box { 
+            display: flex; 
+            justify-content: flex-start; 
+            gap: 3rem; 
+            text-align: left; 
+            margin-bottom: 2rem; 
+            margin-top: 2rem; 
+        }
+        
+        .info-box > div {
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+        
+        .info-box > div:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .info-box strong {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .info-box p:last-child {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .btn-outline-light { 
+            margin: 20px 20px 20px 0; 
+            border: 2px solid white;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-outline-light::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+        
+        .btn-outline-light:hover {
+            color: white;
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .btn-outline-light:hover::before {
+            left: 0;
+        }
+        
+        .content-actions { 
+            display: flex; 
+        }
+        
+        .content-actions .btn { 
+            padding: 0.75rem 1.5rem; 
+            font-size: 1.1rem; 
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 992px) {
+            .navbar-nav {
+                gap: 1rem;
+            }
+            
+            .content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .info-box {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-content {
+                padding: 15px 20px;
+            }
+            
+            .navbar-nav {
+                display: none;
+            }
+            
+            .content {
+                padding: 2rem;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-end;
+            }
+            
+            .content-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .expanded-menu-content {
+                padding: 1.5rem;
+            }
+            
+            .menu-right-column {
+                flex-wrap: wrap;
+            }
+            
+            .image-box {
+                flex-basis: calc(50% - 1rem);
+            }
+        }
+        
+        /* Loading animation */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+        
+        /* Floating elements for futuristic effect */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-40px) translateX(-10px);
+            }
+            75% {
+                transform: translateY(-20px) translateX(-20px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-bar" id="loadingBar"></div>
+    
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <div class="promo-banner">
+        Apex drives the world forward - now starting from $69,900. <a href="#">View Offers</a>
+    </div>
+
+    <div class="navbar-container" id="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <h3>Apex EV</h3>
+                <img src="car-logo.svg" alt="Logo">
+            </div>
+    
+            <ul class="navbar-nav">
+                <li><a class="nav-link expand-trigger" href="#" data-menu="apex-air">Apex Air</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="apex-gravity">Apex Gravity</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="experience">Pre-Owned</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="shop">Discover</a></li>
+            </ul>
+    
+            <div class="navbar-icons">
+                <i class="bi bi-question-circle"></i>
+                <i class="bi bi-globe"></i>
+                <i class="bi bi-person-circle"></i>
+            </div>
+        </div>
+
+        <div id="apex-air-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Air Pure</a></li>
+                    <li><a href="#" class="fade-in">Air Touring</a></li>
+                    <li><a href="#" class="fade-in">Air Grand Touring</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air1.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air2.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air3.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air4.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air5.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="apex-gravity-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Gravity Features</a></li>
+                    <li><a href="#" class="fade-in">Reserve Yours</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="gravity1.webp" alt="Apex Gravity"></a>
+                    <h4 class="fade-in">Learn More</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="gravity2.webp" alt="Reserve Gravity"></a>
+                    <h4 class="fade-in">Reservations</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="experience-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Certified Pre-Owned</a></li>
+                    <li><a href="#" class="fade-in">Our Technology</a></li>
+                    <li><a href="#" class="fade-in">Find a Studio</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="preowned1.webp" alt="Find a Studio"></a>
+                    <h4 class="fade-in">Available Vehicles</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="preowned2.webp" alt="Technology"></a>
+                    <h4 class="fade-in">About Pre-Owned</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="shop-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Apparel</a></li>
+                    <li><a href="#" class="fade-in">Lifestyle</a></li>
+                    <li><a href="#" class="fade-in">Charging</a></li>
+                    <li><a href="#" class="fade-in">Vehicle Accessories</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="ownership.webp" alt="Home Charger"></a>
+                    <h4 class="fade-in">Apex Home Charger</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="lo.png" alt="Travel Collection"></a>
+                    <h4 class="fade-in">Locations</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="accessories.webp" alt="Travel Collection"></a>
+                    <h4 class="fade-in">The Travel Collection</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="ev4.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <div class="content">
+        <div class="content-details">
+            <h1>Accelerating the EV Experience</h1>
+            <div class="info-box">
+                <div><p><strong>Buy from</strong></p><p>$69,900 <sup>1</sup></p><p>Air Pure</p></div>
+                <div><p><strong>Charging Allowance</strong></p><p>$1,000</p><p>on Apex charging accessories</p></div>
+                <div><p><strong>Apex Care</strong></p><p>2 yr or 24,000 mi<sup>2</sup></p><p>free scheduled maintenance</p></div>
+            </div>
+        </div>
+        <div class="content-actions">
+            <button class="btn btn-outline-light">Test Drive</button>
+            <button class="btn btn-outline-light">Order</button>
+        </div>
+    </div>
+
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                setTimeout(() => {
+                    loadingBar.style.display = 'none';
+                }, 300);
+            }, 500);
+        });
+
+        // Create floating elements
+        const floatingContainer = document.getElementById('floatingElements');
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.classList.add('floating-element');
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 15 + 's';
+            element.style.width = (Math.random() * 4 + 2) + 'px';
+            element.style.height = element.style.width;
+            floatingContainer.appendChild(element);
+        }
+
+        // Navbar functionality
+        const navbar = document.getElementById('navbar');
+        const expandTriggers = document.querySelectorAll('.expand-trigger');
+        const menus = document.querySelectorAll('.expanded-menu-content');
+        const nonTriggerItems = document.querySelectorAll(
+            '.navbar-logo, .navbar-icons'
+        );
+
+        function closeAllMenus() {
+            navbar.classList.remove('expanded');
+            menus.forEach(menu => {
+                menu.classList.remove('active');
+            });
+        }
+
+        expandTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                const menuId = trigger.getAttribute('data-menu');
+                const targetMenu = document.getElementById(menuId + '-menu');
+
+                if (targetMenu && targetMenu.classList.contains('active')) return;
+
+                closeAllMenus();
+                
+                if (targetMenu) {
+                    targetMenu.classList.add('active');
+                    navbar.classList.add('expanded');
+                }
+            });
+        });
+
+        nonTriggerItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                closeAllMenus();
+            });
+        });
+
+        navbar.addEventListener('mouseleave', () => {
+            closeAllMenus();
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(10, 10, 15, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.background = 'linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0))';
+                navbar.style.backdropFilter = 'blur(5px)';
+            }
+        });
+    </script>
+</body>
+</html>

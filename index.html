@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Promo Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* CSS to style the video background, navbar, and promo banner */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .promo-banner {
+            background-color: #d2b48c; /* Brownish color */
+            color: black;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .navbar-container {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+            transition: background-color 0.4s, height 0.4s ease-in-out; /* Smoother transition */
+            width: 100%;
+            margin: 0 auto;
+            height: 90px;
+            position:absolute;
+            z-index: 1000;
+            top:44px;
+            left: 0;
+        }
+
+        .navbar-container.expanded {
+            height: 400px; /* Expanded height */
+            background-color: rgba(0, 0, 0, 1); /* Fully opaque black */
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            color: white;
+            position: relative; /* Needed for z-index to work */
+            z-index: 1001;
+        }
+
+        .navbar-logo {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        .navbar-logo img {
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .navbar-nav {
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 0;
+            position: relative; /* --- NEW: Added for hover effect --- */
+        }
+
+        /* --- NEW: CSS for hover "scrollbar" underline --- */
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 10px; /* Position it below the text */
+            left: 0;
+            background-color: white;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%; /* Animate to full width on hover */
+        }
+
+        /* Keep the original gray text on hover */
+        .navbar-nav .nav-link:hover {
+            color: #ccc; 
+        }
+
+        .navbar-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .navbar-icons i {
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* --- CSS FOR EXPANDED MENU --- */
+        .expanded-menu-content {
+            position: absolute;
+            top: 90px; /* Position below the main nav items */
+            left: 0;
+            width: 100%;
+            height: calc(400px - 90px); /* Fill the expanded space */
+            padding: 2rem 4rem;
+            box-sizing: border-box;
+
+            display: flex; /* Always flex, never none */
+            opacity: 0; /* Start hidden */
+            visibility: hidden; /* Use visibility to hide */
+            pointer-events: none; /* Prevent clicks when hidden */
+            
+            /* Transition opacity, and delay hiding visibility */
+            transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+        }
+        
+        /* This rule now makes the menu visible */
+        .navbar-container.expanded .expanded-menu-content.active {
+             opacity: 1; /* Fade in */
+             visibility: visible; /* Make it visible */
+             pointer-events: auto; /* Make it interactive */
+             transition-delay: 0s; /* Remove delay */
+        }
+
+        .menu-left-column {
+            flex-basis: 30%;
+        }
+
+        .menu-right-column {
+            flex-basis: 70%;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .menu-list li a:hover {
+            color: white;
+        }
+        
+        .image-box {
+            flex: 1;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .image-box h4 {
+            color: white;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        /* --- CSS FOR STAGGERED ANIMATION --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        /* This rule triggers the animation */
+        .navbar-container.expanded .expanded-menu-content.active .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Delays for animations --- */
+        
+        /* --- NEW: Delays for APEX AIR menu --- */
+        #apex-air-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #apex-air-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #apex-air-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.4s; }
+
+        #apex-air-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.5s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(3) .fade-in { transition-delay: 0.6s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(4) .fade-in { transition-delay: 0.7s; }
+        #apex-air-menu .menu-right-column .image-box:nth-child(5) .fade-in { transition-delay: 0.8s; }
+
+        /* --- NEW: Delays for APEX GRAVITY menu --- */
+        #apex-gravity-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #apex-gravity-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #apex-gravity-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.3s; }
+        #apex-gravity-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.4s; }
+
+        /* Delays for EXPERIENCE menu */
+        #experience-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #experience-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #experience-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #experience-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.4s; }
+        #experience-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.5s; }
+
+        /* Delays for SHOP menu */
+        #shop-menu .menu-list li:nth-child(1) .fade-in { transition-delay: 0.1s; }
+        #shop-menu .menu-list li:nth-child(2) .fade-in { transition-delay: 0.2s; }
+        #shop-menu .menu-list li:nth-child(3) .fade-in { transition-delay: 0.3s; }
+        #shop-menu .menu-list li:nth-child(4) .fade-in { transition-delay: 0.4s; }
+        #shop-menu .menu-right-column .image-box:nth-child(1) .fade-in { transition-delay: 0.5s; }
+        #shop-menu .menu-right-column .image-box:nth-child(2) .fade-in { transition-delay: 0.6s; }
+
+
+        /* Existing CSS for main content, etc. */
+        .content { height: 100vh; display: flex; justify-content: space-between; align-items: flex-end; color: white; padding: 4rem; box-sizing: border-box; }
+        .content h1 { font-size: 2.5rem; margin-bottom: 1rem; font-weight: 300; }
+        .content .info-box { display: flex; justify-content: flex-start; gap: 3rem; text-align: left; margin-bottom: 2rem; margin-top: 2rem; }
+        .btn-outline-light{ margin: 20px; }
+        .content-actions { display: flex; }
+        .content-actions .btn { padding: 0.75rem 1.5rem; font-size: 1.1rem; }
+
+    </style>
+</head>
+<body>
+
+    <div class="promo-banner">
+        Apex drives the world forward - now starting from $69,900. <a href="#" style="color: black; text-decoration: underline;">View Offers</a>
+    </div>
+
+    <div class="navbar-container" id="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <h3>Apex EV</h3>
+                <img src="car-logo.svg" alt="Logo">
+            </div>
+    
+            <ul class="navbar-nav">
+                <li><a class="nav-link expand-trigger" href="#" data-menu="apex-air">Apex Air</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="apex-gravity">Apex Gravity</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="experience">Pre-Owned</a></li>
+                <li><a class="nav-link expand-trigger" href="#" data-menu="shop">Discover</a></li>
+            </ul>
+    
+            <div class="navbar-icons">
+                <i class="bi bi-question-circle"></i>
+                <i class="bi bi-globe"></i>
+                <i class="bi bi-person-circle"></i>
+            </div>
+        </div>
+
+        <div id="apex-air-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Air Pure</a></li>
+                    <li><a href="#" class="fade-in">Air Touring</a></li>
+                    <li><a href="#" class="fade-in">Air Grand Touring</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air1.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air2.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air3.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air4.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="air5.webp" alt="Apex Air"></a>
+                    <h4 class="fade-in">View Gallery</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="apex-gravity-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Gravity Features</a></li>
+                    <li><a href="#" class="fade-in">Reserve Yours</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="gravity1.webp" alt="Apex Gravity"></a>
+                    <h4 class="fade-in">Learn More</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="gravity2.webp" alt="Reserve Gravity"></a>
+                    <h4 class="fade-in">Reservations</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="experience-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Certified Pre-Owned</a></li>
+                    <li><a href="#" class="fade-in">Our Technology</a></li>
+                    <li><a href="#" class="fade-in">Find a Studio</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="preowned1.webp" alt="Find a Studio"></a>
+                    <h4 class="fade-in">Available Vehicles</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="preowned2.webp" alt="Technology"></a>
+                    <h4 class="fade-in">About Pre-Owned</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="shop-menu" class="expanded-menu-content">
+            <div class="menu-left-column">
+                <ul class="menu-list">
+                    <li><a href="#" class="fade-in">Apparel</a></li>
+                    <li><a href="#" class="fade-in">Lifestyle</a></li>
+                    <li><a href="#" class="fade-in">Charging</a></li>
+                    <li><a href="#" class="fade-in">Vehicle Accessories</a></li>
+                </ul>
+            </div>
+            <div class="menu-right-column">
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="ownership.webp" alt="Home Charger"></a>
+                    <h4 class="fade-in">Apex Home Charger</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="lo.png" alt="Travel Collection"></a>
+                    <h4 class="fade-in">Locations</h4>
+                </div>
+                <div class="image-box">
+                    <a href="#" class="fade-in"><img src="accessories.webp" alt="Travel Collection"></a>
+                    <h4 class="fade-in">The Travel Collection</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="video-background"><video autoplay loop muted><source src="ev4.mp4" type="video/mp4"></video></div>
+    <div class="content">
+        <div class="content-details">
+            <h1>Accelerating the EV Experience</h1>
+            <div class="info-box">
+                <div><p><strong>Buy from</strong></p><p>$69,900 <sup>1</sup></p><p>Air Pure</p></div>
+                <div><p><strong>Charging Allowance</strong></p><p>$1,000</p><p>on Apex charging accessories</p></div>
+                <div><p><strong>Apex Care</strong></p><p>2 yr or 24,000 mi<sup>2</sup></p><p>free scheduled maintenance</p></div>
+            </div>
+        </div>
+        <div class="content-actions">
+            <button class="btn btn-outline-light">Test Drive</button>
+            <button class="btn btn-outline-light">Order</button>
+        </div>
+    </div>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const expandTriggers = document.querySelectorAll('.expand-trigger');
+        const menus = document.querySelectorAll('.expanded-menu-content');
+        
+        /* * MODIFIED: Updated this selector.
+         * The only non-triggers left are the logo and icons.
+         * All nav links are now triggers.
+        */
+        const nonTriggerItems = document.querySelectorAll(
+            '.navbar-logo, .navbar-icons'
+        );
+
+        function closeAllMenus() {
+            navbar.classList.remove('expanded');
+            menus.forEach(menu => {
+                menu.classList.remove('active');
+            });
+        }
+
+        expandTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                const menuId = trigger.getAttribute('data-menu');
+                const targetMenu = document.getElementById(menuId + '-menu');
+
+                // If this menu is already active, do nothing
+                if (targetMenu && targetMenu.classList.contains('active')) return;
+
+                // Close all menus first
+                closeAllMenus();
+                
+                // Then, open the target menu
+                if (targetMenu) {
+                    targetMenu.classList.add('active');
+                    navbar.classList.add('expanded');
+                }
+            });
+        });
+
+        nonTriggerItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                closeAllMenus();
+            });
+        });
+
+        navbar.addEventListener('mouseleave', () => {
+            closeAllMenus();
+        });
+    </script>
+</body>
+</html>
