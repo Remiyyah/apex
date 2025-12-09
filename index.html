@@ -10,6 +10,20 @@
 
     <style>
         /* CSS to style the video background, navbar, and promo banner */
+        /* Keep Order button white all the time */
+.btn-order {
+    color: white !important;              /* Text stays white */
+    border-color: white !important;       /* Border stays white */
+    background-color: transparent !important; /* Optional: stays transparent */
+}
+
+.btn-order:hover,
+.btn-order:focus,
+.btn-order:active {
+    color: white !important;
+    border-color: white !important;
+    background-color: transparent !important; /* Prevent Bootstrap hover color */
+}
         body {
             margin: 0;
             padding: 0;
@@ -396,7 +410,7 @@
         </div>
         <div class="content-actions">
             <button class="btn btn-outline-light">Test Drive</button>
-            <button class="btn btn-outline-light">Order</button>
+            <button class="btn btn-outline-light btn-order">Order</button>
         </div>
     </div>
 
